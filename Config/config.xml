@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<config xmlns="http://thelia.net/schema/dic/config"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://thelia.net/schema/dic/config http://thelia.net/schema/dic/config/thelia-1.0.xsd">
+
+    <forms>
+        <form name="easymanagestock_configuration_form" class="EasyManageStock\Form\EasyManageStockConfig" />
+    </forms>
+
+    <hooks>
+        <hook id="easymanagestock.hook" class="EasyManageStock\Hook\HookManager" scope="request">
+            <tag name="hook.event_listener" event="module.configuration" type="back" templates="render:module_configuration.html" />
+        </hook>
+    </hooks>
+    <!--
+    <hooks>
+        <hook id="easymanagestock.hook" class="EasyManageStock\Hook\MySuperHook">
+            <tag name="hook.event_listener" event="main.body.bottom" type="front|back|pdf|email" method="onMainBodyBottom" />
+        </hook>
+    </hooks>
+    -->
+</config>

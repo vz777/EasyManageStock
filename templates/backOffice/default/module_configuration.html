@@ -1,0 +1,92 @@
+{assign product_page {$smarty.get.page|default:1}}
+{$limit={$smarty.get.limit|default:100}}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="general-block-decorator">
+            <div class="table-responsive">
+                <table class="table table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th>
+                                ID DE DECLINAISON
+                            </th>
+                            <th>
+                                REF
+                            </th>
+                            <th>
+                                PRIX
+                            </th>
+                            <th>
+                                WEIGHT
+                            </th>
+                            <th>
+                                NOUVEAU STOCK
+                            </th>
+                            <th>
+                            </th>
+                            <th>{*<!-- a supprimer dans le futur-->*}
+                                VERIFICATION
+                            </th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                    {loop type='product' name="easymanagestock_configuration" default="yes" visible="yes" order="id" limit=$limit page=$product_page}
+                        <tr class="text-center">
+                            <td colspan="7"><b>{$TITLE}</b></td>
+                        </tr>
+                            {loop type="product_sale_elements" name="product_sale_elements_combination_form" product=$ID
+                                order="id" backend_context=1}
+                                <tr>
+                                    <td>{$ID}</td>
+                                    <td>{$REF}</td>
+                                    <td>{$PRICE}</td>
+                                    <td>{$WEIGHT}</td>
+                                    <td>
+                                        {form name="easymanagestock_configuration_form"} {form_enctype form=$form}
+                                        <form method="POST" action="{url path='/admin/module/easymanagestock'}">
+                                            {form_hidden_fields form=$form}
+                                            {if $form_error}<div class="alert alert-danger">{$form_error_message}</div>{/if}
+            
+                                            <input type="hidden" name="product_id" value="{$PRODUCT_ID}" />
+                                            <input type="hidden" name="pse_id" value="{$ID}" />
+            
+                                            {form_field form=$form field="stock"}
+                                            {form_error form=$form field="stock"}{$message|default:null}{/form_error}
+                                            {loop type="auth" name="can_change" role="ADMIN" resource="admin.product" access="UPDATE"}
+                                            <input type="number" name="{$name}" id="stock" value="{$value}" class="form-control"
+                                                min="0">
+                                            {/loop}
+                                            {/form_field}
+            
+                                            <td><button type="submit" class="btn btn-primary">Update Stock</button></td>
+                                        </form>
+                                        {/form}
+                                    </td>
+                                    <td>{*<!-- a supprimer dans le futur-->*}
+                                        QTY = {$QUANTITY}
+                                    </td>
+                                </tr>
+                            {/loop}
+                        
+                    {/loop}
+                    </tbody>
+                                    <tfoot>        <tr>
+                            <td colspan="100">
+                                {include
+                                    file = "includes/pagination.html"
+
+                                    loop_ref       = "easymanagestock_configuration"
+                                    max_page_count = 10
+                                    page_url       = {url path='/admin/module/easymanagestock'}
+                                }
+                             </td>
+                         </tr>
+                     </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
